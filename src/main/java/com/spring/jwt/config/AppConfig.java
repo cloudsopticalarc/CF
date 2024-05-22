@@ -42,34 +42,31 @@ public class AppConfig {
     @Autowired
     JwtConfig jwtConfig;
 
-
     @Autowired
     private JwtService jwtService;
 
     @Bean
-    public JwtConfig jwtConfig(){
+    public JwtConfig jwtConfig() {
         return new JwtConfig();
     }
 
-
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
 
     @Bean
-    public UserDetailsService userDetailsService(){
-
+    public UserDetailsService userDetailsService() {
         return new UserDetailsServiceCustom();
     }
 
     @Autowired
-    public void configGlobal(final AuthenticationManagerBuilder auth){
+    public void configGlobal(final AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(customAuthenticationProvider);
     }
 
@@ -89,7 +86,6 @@ public class AppConfig {
                 .csrf().disable()
                 .formLogin().disable()
                 .authorizeHttpRequests()
-
                 .requestMatchers("/account/**").permitAll()
                 .requestMatchers(
                         "/api/v1/auth/**",
@@ -107,10 +103,9 @@ public class AppConfig {
                 .requestMatchers("/cars/**").permitAll()
                 .requestMatchers("/finalBid/**").permitAll()
                 .requestMatchers("/BeadingCarController/**").permitAll()
-                .requestMatchers("/booking/**").hasAnyAuthority("USER", "ADMIN","DEALER")
+                .requestMatchers("/booking/**").hasAnyAuthority("USER", "ADMIN", "DEALER")
                 .requestMatchers("/userProfilePhoto/**").permitAll()
                 .requestMatchers("/uploadFile/**").permitAll()
-
                 .requestMatchers("/confirmBooking/**").permitAll()
                 .requestMatchers("/photo/**").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
@@ -137,17 +132,17 @@ public class AppConfig {
                 .accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
                 .addFilterBefore(new JwtUsernamePasswordAuthenticationFilter(manager, jwtConfig, jwtService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig, jwtService), UsernamePasswordAuthenticationFilter.class)
-        ;
+                .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig, jwtService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         return new CorsConfigurationSource() {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration config = new CorsConfiguration();
-                config.setAllowedOrigins(Collections.singletonList("https://cartechindia.com/"));
+                config.setAllowedOrigins(Collections.singletonList("https://cartechindia.com"));
                 config.setAllowedMethods(Collections.singletonList("*"));
                 config.setAllowCredentials(true);
                 config.setAllowedHeaders(Collections.singletonList("*"));
@@ -157,11 +152,4 @@ public class AppConfig {
             }
         };
     }
-
-
 }
-
-
-
-
-
